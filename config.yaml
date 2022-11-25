@@ -1,0 +1,6 @@
+orchestrator:
+  server:
+    banner: banner.txt
+    version: 1.0.0
+    application-name: Orchestrator Web Server
+    port: 8000
