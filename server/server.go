@@ -9,18 +9,20 @@ import (
 
 // The web server
 type Server struct {
-	name   string
-	port   string
-	router *Router
+	name    string
+	port    string
+	router  *Router
+	profile *config.ProfileConfig
 }
 
 // Create a Server instance
 func BuildServer() *Server {
-	config := config.LoadConfig()
+	config, profileConfig := config.LoadConfig()
 	return &Server{
-		name:   config.Orchestrator.Server.AppName,
-		port:   config.Orchestrator.Server.Port,
-		router: BuildRouter(),
+		name:    config.Orchestrator.Server.AppName,
+		port:    config.Orchestrator.Server.Port,
+		router:  BuildRouter(),
+		profile: profileConfig,
 	}
 }
 

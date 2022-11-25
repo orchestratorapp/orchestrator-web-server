@@ -8,24 +8,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// The server configuration structure. This struct maps the config.yaml
-// structure, so that it can easily be parsed and read when necessary.
-// It is recommended to change this struct according to the changes that
-// are made to the config.yaml, to keep it consistent.
-type ServerConfig struct {
-	Orchestrator struct {
-		Server struct {
-			Banner  string `yaml:"banner"`
-			Version string `yaml:"version"`
-			AppName string `yaml:"application-name"`
-			Port    string `yaml:"port"`
-		} `yaml:"server"`
-	} `yaml:"orchestrator"`
-}
-
 // Loads the configuration from the config.yaml file
 // and makes it available for all the application.
-func LoadConfig() ServerConfig {
+func LoadConfig() (*ServerConfig, *ProfileConfig) {
 	f, err := os.Open("./config.yaml")
 	if err != nil {
 		log.Fatalf("\033[41m FATAL \033[0m %v", err)
@@ -40,7 +25,25 @@ func LoadConfig() ServerConfig {
 	}
 	cfg.Orchestrator.Server.Port = ":" + cfg.Orchestrator.Server.Port
 	printBanner(cfg)
-	return cfg
+	profileCfg := loadProfile(cfg.Orchestrator.ActiveProfile)
+	return &cfg, profileCfg
+}
+
+func loadProfile(profile string) *ProfileConfig {
+	f, err := os.Open("./config-" + profile + ".yaml")
+	if err != nil {
+		log.Fatalf("\033[41m FATAL \033[0m %v", err)
+	}
+	defer f.Close()
+	var cfg ProfileConfig
+	decoder := yaml.NewDecoder(f)
+	err = decoder.Decode(&cfg)
+	if err != nil {
+		log.Fatalf("\033[41m FATAL \033[0m %v", err)
+	}
+
+	log.Printf("Active profile: \033[32m%v\033[0m", profile)
+	return &cfg
 }
 
 func printBanner(cfg ServerConfig) {

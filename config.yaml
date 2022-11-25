@@ -4,3 +4,4 @@ orchestrator:
     version: 1.0.0
     application-name: Orchestrator Web Server
     port: 8000
+  active-profile: local
