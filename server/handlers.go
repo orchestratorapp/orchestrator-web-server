@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -14,11 +13,23 @@ type Student struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
-// Handles the root ("/") path
+// Handles the root ("/") path. This function serves as an
+// example handler, and should be deleted as you write your
+// own code :)
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hola!")
+	response, err := json.Marshal("Hello, world!")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		LogError(http.StatusInternalServerError, r.URL.Path, err)
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.Write(response)
+	LogInfo(http.StatusOK, r.URL.Path, time.Now())
 }
 
+// Handles the post ("/post") path. This function serves as an
+// example handler, and should be deleted as you write your
+// own code :)
 func PostRequest(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var student Student

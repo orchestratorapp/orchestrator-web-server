@@ -1,9 +1,5 @@
 package config
 
-type Config interface {
-	Build()
-}
-
 // The server configuration structure. This struct maps the config.yaml
 // structure, so that it can easily be parsed and read when necessary.
 // It is recommended to change this struct according to the changes that
@@ -20,8 +16,6 @@ type ServerConfig struct {
 	} `yaml:"orchestrator"`
 }
 
-func (*ServerConfig) Build() {}
-
 type ProfileConfig struct {
 	Database struct {
 		Host     string `yaml:"host"`
@@ -30,5 +24,3 @@ type ProfileConfig struct {
 		Password string `yaml:"password"`
 	} `yaml:"database"`
 }
-
-func (*ProfileConfig) Build() {}

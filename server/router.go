@@ -1,13 +1,10 @@
 package server
 
 import (
+	"encoding/json"
+	"errors"
 	"net/http"
 )
-
-// The Router handler
-type Router struct {
-	rules map[string]map[string]http.HandlerFunc
-}
 
 // Create a Router instance
 func BuildRouter() *Router {
@@ -32,12 +29,22 @@ func (r *Router) FindHandler(path string, method string) (http.HandlerFunc, bool
 func (r *Router) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 	handler, pathExists, methodExists := r.FindHandler(request.URL.Path, request.Method)
 	if !pathExists {
+		err := errors.New("path " + request.URL.Path + " is not registered")
+		response, _ := json.Marshal(BuildErrorResponse(http.StatusNotFound, err))
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
+		w.Write(response)
+		LogError(http.StatusNotFound, request.URL.Path, err)
 		return
 	}
 
 	if !methodExists {
+		err := errors.New("no handler for the " + request.Method + " method in the " + request.URL.Path + " path")
+		response, _ := json.Marshal(BuildErrorResponse(http.StatusMethodNotAllowed, err))
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write(response)
+		LogError(http.StatusMethodNotAllowed, request.URL.Path, err)
 		return
 	}
 	handler(w, request)
