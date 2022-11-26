@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
-	middleware "orchestrator_server/middleware"
-	server "orchestrator_server/server"
+
+	middleware "github.com/orchestratorapp/orchestrator-web-server/middleware"
+	server "github.com/orchestratorapp/orchestrator-web-server/server"
 )
 
 func main() {

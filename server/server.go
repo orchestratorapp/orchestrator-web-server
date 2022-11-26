@@ -3,8 +3,9 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"orchestrator_server/config"
-	"orchestrator_server/middleware"
+
+	"github.com/orchestratorapp/orchestrator-web-server/config"
+	"github.com/orchestratorapp/orchestrator-web-server/middleware"
 )
 
 // The web server

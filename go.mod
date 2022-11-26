@@ -1,4 +1,4 @@
-module orchestrator_server
+module github.com/orchestratorapp/orchestrator-web-server
 
 go 1.19
 
