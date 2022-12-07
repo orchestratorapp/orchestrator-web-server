@@ -3,15 +3,9 @@ package server
 import (
 	"encoding/json"
 	"errors"
+	"github.com/google/uuid"
 	"net/http"
 )
-
-// Create a Router instance
-func BuildRouter() *Router {
-	return &Router{
-		rules: make(map[string]map[string]http.HandlerFunc),
-	}
-}
 
 // Finds the assigned handler for the provided path
 func (r *Router) FindHandler(path string, method string) (http.HandlerFunc, bool, bool) {
@@ -47,5 +41,11 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 		LogError(http.StatusMethodNotAllowed, request.URL.Path, err)
 		return
 	}
-	handler(w, request)
+	job := Job{
+		Name:    uuid.New(),
+		Request: request,
+		Writer:  w,
+		Handler: handler,
+	}
+	r.JobQueue <- job
 }

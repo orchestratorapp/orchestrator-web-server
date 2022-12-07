@@ -4,4 +4,6 @@ orchestrator:
     version: 1.0.0
     application-name: Orchestrator Web Server
     port: 8000
+    max-queue-size: 30
+    max-workers: 4
   active-profile: local

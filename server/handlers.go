@@ -45,6 +45,7 @@ func PostRequest(w http.ResponseWriter, r *http.Request) {
 		LogError(http.StatusInternalServerError, r.URL.Path, err)
 	}
 	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	w.Write(response)
 	LogInfo(http.StatusCreated, r.URL.Path, time.Now())
 }

@@ -27,6 +27,7 @@ func LoadConfig() (*ServerConfig, *ProfileConfig) {
 	cfg.Orchestrator.Server.Port = ":" + cfg.Orchestrator.Server.Port
 	printBanner(cfg)
 	profileCfg, err := loadProfile(cfg.Orchestrator.ActiveProfile)
+	fmt.Printf("Active workers: \u001B[32m%d\u001B[0m\n", cfg.Orchestrator.Server.MaxWorkers)
 	if err != nil {
 		log.Fatalf("\033[41m FATAL \033[0m %v", err)
 	}
@@ -47,7 +48,7 @@ func loadProfile(profile string) (*ProfileConfig, error) {
 			log.Fatalf("\033[41m FATAL \033[0m %v", err)
 		}
 
-		log.Printf("Active profile: \033[32m%v\033[0m", profile)
+		fmt.Printf("Active profile: \033[32m%v\033[0m\n", profile)
 		return &cfg, nil
 	}
 	return nil, errors.New("no profiles found")

@@ -22,7 +22,7 @@ func BuildServer() *Server {
 	return &Server{
 		name:    config.Orchestrator.Server.AppName,
 		port:    config.Orchestrator.Server.Port,
-		router:  BuildRouter(),
+		router:  BuildRouter(config.Orchestrator.Server.MaxQueueSize, config.Orchestrator.Server.MaxWorkers),
 		profile: profileConfig,
 	}
 }
@@ -34,6 +34,7 @@ func (s *Server) Listen() error {
 		"\033[35m%s\033[0m is alive and listening on port \033[32m%s\033[0m\n",
 		s.name, s.port,
 	)
+	s.router.Dispatcher.Run()
 	err := http.ListenAndServe(s.port, nil)
 	if err != nil {
 		return err

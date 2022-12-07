@@ -7,10 +7,12 @@ package config
 type ServerConfig struct {
 	Orchestrator struct {
 		Server struct {
-			Banner  string `yaml:"banner"`
-			Version string `yaml:"version"`
-			AppName string `yaml:"application-name"`
-			Port    string `yaml:"port"`
+			Banner       string `yaml:"banner"`
+			Version      string `yaml:"version"`
+			AppName      string `yaml:"application-name"`
+			Port         string `yaml:"port"`
+			MaxQueueSize int    `yaml:"max-queue-size"`
+			MaxWorkers   int    `yaml:"max-workers"`
 		} `yaml:"server"`
 		ActiveProfile string `yaml:"active-profile"`
 	} `yaml:"orchestrator"`
